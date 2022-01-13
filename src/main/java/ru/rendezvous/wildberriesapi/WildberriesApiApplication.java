@@ -10,12 +10,7 @@ public class WildberriesApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WildberriesApiApplication.class, args);
-
-        Zendesk zd = new Zendesk.Builder("https://{{your domain}}.zendesk.com")
-                .setUsername("...")
-                .setToken("...") // or .setPassword("...")
-                .build();
-
+        Zendesk z = new Zendesk
         WildberriesClient client = new WildberriesClient("https://suppliers-api.wildberries.ru", "123345567789");
     }
 }

@@ -24,6 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // https://mvnrepository.com/artifact/com.cloudbees.thirdparty/zendesk-java-client
     implementation group: 'com.cloudbees.thirdparty', name: 'zendesk-java-client', version: '0.16.0'
+    // https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
+    implementation group: 'org.asynchttpclient', name: 'async-http-client', version: '2.12.3'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
