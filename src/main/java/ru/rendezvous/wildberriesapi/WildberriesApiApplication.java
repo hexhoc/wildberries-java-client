@@ -2,15 +2,19 @@ package ru.rendezvous.wildberriesapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.zendesk.client.v2.Zendesk;
 import ru.rendezvous.wildberriesapi.client.WildberriesClient;
+import ru.rendezvous.wildberriesapi.service.WildberriesManager;
 
 @SpringBootApplication
 public class WildberriesApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WildberriesApiApplication.class, args);
-        Zendesk z = new Zendesk
-        WildberriesClient client = new WildberriesClient("https://suppliers-api.wildberries.ru", "123345567789");
+
+        WildberriesClient client = new WildberriesClient("https://suppliers-api.wildberries.ru",
+                "123456789");
+
+        WildberriesManager manager = new WildberriesManager(client);
+        manager.createCards();
     }
 }
