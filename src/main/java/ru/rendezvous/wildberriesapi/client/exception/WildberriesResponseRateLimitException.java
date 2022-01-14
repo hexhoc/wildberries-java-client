@@ -1,4 +1,4 @@
-package ru.rendezvous.wildberriesapi.client;
+package ru.rendezvous.wildberriesapi.client.exception;
 
 import org.asynchttpclient.Response;
 
@@ -12,7 +12,7 @@ public class WildberriesResponseRateLimitException extends WildberriesResponseEx
 
     private Long retryAfter = DEFAULT_RETRY_AFTER;
 
-    public WildberriesResponseRateLimitException(Response resp) throws IOException {
+    public WildberriesResponseRateLimitException(Response resp) {
             super(resp);
             try {
                 this.retryAfter = Long.valueOf(resp.getHeader(RETRY_AFTER_HEADER));
@@ -21,7 +21,7 @@ public class WildberriesResponseRateLimitException extends WildberriesResponseEx
             }
         }
 
-    protected WildberriesResponseRateLimitException(WildberriesResponseRateLimitException e) {
+    public WildberriesResponseRateLimitException(WildberriesResponseRateLimitException e) {
             super(e);
             this.retryAfter = e.getRetryAfter();
         }

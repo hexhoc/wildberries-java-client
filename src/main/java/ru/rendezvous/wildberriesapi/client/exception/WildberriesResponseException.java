@@ -1,4 +1,4 @@
-package ru.rendezvous.wildberriesapi.client;
+package ru.rendezvous.wildberriesapi.client.exception;
 
 import org.asynchttpclient.Response;
 
@@ -13,7 +13,7 @@ public class WildberriesResponseException extends WildberriesException {
     private String statusText;
     private String body;
 
-    public WildberriesResponseException(Response resp) throws IOException {
+    public WildberriesResponseException(Response resp) {
         this(resp.getStatusCode(), resp.getStatusText(), resp.getResponseBody());
     }
 

@@ -1,4 +1,4 @@
-package ru.rendezvous.wildberriesapi.client;
+package ru.rendezvous.wildberriesapi.client.exception;
 
 public class WildberriesException extends RuntimeException {
 
