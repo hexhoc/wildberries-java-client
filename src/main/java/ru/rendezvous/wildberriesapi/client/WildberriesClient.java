@@ -20,6 +20,7 @@ import ru.rendezvous.wildberriesapi.client.exception.WildberriesResponseRateLimi
 import ru.rendezvous.wildberriesapi.client.model.Card;
 import ru.rendezvous.wildberriesapi.client.model.CardFilter;
 import ru.rendezvous.wildberriesapi.client.model.JobStatus;
+import ru.rendezvous.wildberriesapi.client.model.config.CategoryConfig;
 
 @Getter
 public class WildberriesClient implements Closeable {
@@ -106,6 +107,19 @@ public class WildberriesClient implements Closeable {
                 Collections.singletonMap("tickets", cards))), handleJobStatus());
     }
 
+    // GET https://suppliers-api.wildberries.ru/api/v1/config/get/object/translated?name=Кроссовки
+
+    /**
+     * All characteristics for a certain category of products
+     * @param categoryName
+     * @return CategoryConfig
+     */
+    public CategoryConfig getCategoryConfig(String categoryName) {
+        return complete(submit(req("GET", tmpl("/api/v1/config/get/object/translated?name={categoryName}")
+                        .set("categoryName", categoryName)),
+                handle(CategoryConfig.class,"data")));
+    }
+
     ///////////////////////////////////////////////////////////////
     // SERVICE METHODS
     ///////////////////////////////////////////////////////////////
@@ -165,6 +179,10 @@ public class WildberriesClient implements Closeable {
         return builder.setUrl(url);
     }
 
+    private TemplateUri tmpl(String template) {
+        return new TemplateUri(url + template);
+    }
+
     private Uri cnst(String template) {
         return new FixedUri(url + template);
     }
@@ -181,6 +199,10 @@ public class WildberriesClient implements Closeable {
 
     private boolean isStatus2xx(Response response) {
         return response.getStatusCode() / 100 == 2;
+    }
+
+    private boolean hasError(Response response) {
+        return response.getResponseBody().contains("\"error\":true");
     }
 
     private boolean isRateLimitResponse(Response response) {
@@ -221,7 +243,7 @@ public class WildberriesClient implements Closeable {
             @Override
             public T onCompleted(Response response) throws Exception {
                 logResponse(response);
-                if (isStatus2xx(response)) {
+                if (isStatus2xx(response) && !hasError(response)) {
                     return (T) mapper.readerFor(clazz).readValue(response.getResponseBodyAsStream());
                 } else if (isRateLimitResponse(response)) {
                     throw new WildberriesResponseRateLimitException(response);
@@ -263,7 +285,7 @@ public class WildberriesClient implements Closeable {
         @Override
         public T onCompleted(Response response) throws Exception {
             logResponse(response);
-            if (isStatus2xx(response)) {
+            if (isStatus2xx(response) && !hasError(response)) {
                 if (typeParams.length > 0) {
                     JavaType type = mapper.getTypeFactory().constructParametricType(clazz, typeParams);
                     return mapper.convertValue(mapper.readTree(response.getResponseBodyAsStream()).get(name), type);
@@ -340,7 +362,7 @@ public class WildberriesClient implements Closeable {
         @Override
         public List<T> onCompleted(Response response) throws Exception {
             logResponse(response);
-            if (isStatus2xx(response)) {
+            if (isStatus2xx(response) && !hasError(response)) {
                 JsonNode responseNode = mapper.readTree(response.getResponseBodyAsBytes());
                 setPagedProperties(responseNode, clazz);
                 List<T> values = new ArrayList<>();
