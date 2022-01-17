@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 @Getter @Setter
 /**
+ * /api/v1/config/get/object/all Получение всех имен доступных категорий
  * /api/v1/config/get/object/translated Получение конфигурации предмета
  */
-public class CategoryConfig {
+public class ObjectConfig {
     ArrayList<AddinConfig> addin = new ArrayList<>();
     private float id;
     private boolean isDeleted;

@@ -20,7 +20,7 @@ import ru.rendezvous.wildberriesapi.client.exception.WildberriesResponseRateLimi
 import ru.rendezvous.wildberriesapi.client.model.Card;
 import ru.rendezvous.wildberriesapi.client.model.CardFilter;
 import ru.rendezvous.wildberriesapi.client.model.JobStatus;
-import ru.rendezvous.wildberriesapi.client.model.config.CategoryConfig;
+import ru.rendezvous.wildberriesapi.client.model.config.ObjectConfig;
 
 @Getter
 public class WildberriesClient implements Closeable {
@@ -114,10 +114,10 @@ public class WildberriesClient implements Closeable {
      * @param categoryName
      * @return CategoryConfig
      */
-    public CategoryConfig getCategoryConfig(String categoryName) {
+    public ObjectConfig getObjectConfig(String categoryName) {
         return complete(submit(req("GET", tmpl("/api/v1/config/get/object/translated?name={categoryName}")
                         .set("categoryName", categoryName)),
-                handle(CategoryConfig.class,"data")));
+                handle(ObjectConfig.class,"data")));
     }
 
     ///////////////////////////////////////////////////////////////
