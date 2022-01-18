@@ -4,7 +4,9 @@ import ru.rendezvous.wildberriesapi.client.WildberriesClient;
 import ru.rendezvous.wildberriesapi.client.model.Card;
 import ru.rendezvous.wildberriesapi.client.model.config.ObjectConfig;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,8 +25,14 @@ public class WildberriesManager {
 //        client.getCardList(new CardFilter());
     }
 
+    public UUID uploadFile() {
+        UUID uuid = UUID.randomUUID();
+        client.uploadFile(uuid, new File("/home/hexhoc/Pictures/2414910_1.jpeg"));
 
-    public Card createCard() {
+        return uuid;
+    }
+
+    public Card createCard(HashMap<String, UUID> filesUuid) {
         //TODO Make category mapping
         //use /api/v1/config/get/object/all?top=10000 Получение всех имен доступных категорий
 
@@ -35,11 +43,11 @@ public class WildberriesManager {
         // Категория товара (Джинсы, Книги и другие).
         card.setObject("Кроссовки");
         // Артикул поставщика.
-        card.setSupplierVendorCode("NEBULA PUFFY WNTR MID");
+        card.setSupplierVendorCode("NEBULA_PUFFY_WNTR_MID"); //Недопускаются пробелы
         //Структура, содержащая характеристики карточки, общие для всех номенклатур и размеров.
         card.setAddin(createCardAddin());
         // Массив номенклатур товара.
-        card.setNomenclatures(createCardNomenclatures());
+        card.setNomenclatures(createCardNomenclatures(filesUuid));
 
         //CREATE CARD
         client.createCard(card);
@@ -56,7 +64,7 @@ public class WildberriesManager {
         List<Card.Addin> cardAddinList = new ArrayList<>();
         //TODO Бренд нужно проверять по словарю https://suppliers-api.wildberries.ru/api/v1/directory/brands?pattern=nike&top=5000
         //"required": true, "useOnlyDictionaryValues": true
-        cardAddinList.add(new Card.Addin("Бренд", new Card.Params("Nike")));
+        cardAddinList.add(new Card.Addin("Бренд", new Card.Params("TENDANCE")));
         //"required": false, "useOnlyDictionaryValues": false,
         cardAddinList.add(new Card.Addin("Описание", new Card.Params("Спортивные кроссовки. Беговые.")));
         //"required": false, "useOnlyDictionaryValues": false
@@ -110,11 +118,17 @@ public class WildberriesManager {
         return cardAddinList;
     }
 
-    private List<Card.Addin> createNomenclaturesAddin() {
+    private List<Card.Addin> createNomenclaturesAddin(HashMap<String, UUID> filesUuid) {
         //CREATE ADDIN
         List<Card.Addin> nomenclaturesAddinList = new ArrayList<>();
-        nomenclaturesAddinList.add(new Card.Addin("Фото", new Card.Params("Nike")));
-        nomenclaturesAddinList.add(new Card.Addin("Описание", new Card.Params("Спортивные кроссовки. Беговые.")));
+        if (filesUuid.containsKey("Фото")) {
+            nomenclaturesAddinList.add(new Card.Addin("Фото", new Card.Params(
+                    null,
+                    "images/jpeg",
+                    filesUuid.get("Фото").toString()
+            )));
+        }
+        // nomenclaturesAddinList.add(new Card.Addin("Фото360", new Card.Params("Спортивные кроссовки. Беговые.")));
 
         return nomenclaturesAddinList;
     }
@@ -124,7 +138,7 @@ public class WildberriesManager {
         Card.Variation variation = new Card.Variation();
         //TODO Create table with barcode OR function to generate barcode
         // Штрихкод товара.
-        variation.setBarcode("2001925979004");
+        variation.setBarcode("985748601234567890");
         // Структура, содержащая характеристики конкретной вариации товара.
         variation.setAddin(createVariationsAddin());
 
@@ -143,17 +157,17 @@ public class WildberriesManager {
         return variationsAddinList;
     }
 
-    private List<Card.Nomenclature> createCardNomenclatures() {
+    private List<Card.Nomenclature> createCardNomenclatures(HashMap<String, UUID> filesUuid) {
         //CREATE NOMENCLATURES
         ArrayList<Card.Nomenclature> cardNomenclatureList = new ArrayList<>();
 
         Card.Nomenclature cardNomenclature = new Card.Nomenclature();
         // Артикул товара.
-        cardNomenclature.setVendorCode("NEBULA PUFFY WNTR MID, черный");
+        cardNomenclature.setVendorCode("NEBULA_PUFFY_WNTR_MID"); //не допускаются пробелы
         // Массив вариаций товара. Одна цена - один размер - одна вариация.
         cardNomenclature.setVariations(createVariations());
         // Структура, содержащая характеристики конкретной номенклатуры.
-        cardNomenclature.setAddin(createNomenclaturesAddin());
+        cardNomenclature.setAddin(createNomenclaturesAddin(filesUuid));
 
         cardNomenclatureList.add(cardNomenclature);
 

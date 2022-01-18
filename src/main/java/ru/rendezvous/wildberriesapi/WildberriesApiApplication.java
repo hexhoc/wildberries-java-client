@@ -6,6 +6,9 @@ import ru.rendezvous.wildberriesapi.client.WildberriesClient;
 import ru.rendezvous.wildberriesapi.client.model.config.ObjectConfig;
 import ru.rendezvous.wildberriesapi.service.WildberriesManager;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 @SpringBootApplication
 public class WildberriesApiApplication {
 
@@ -13,9 +16,16 @@ public class WildberriesApiApplication {
         SpringApplication.run(WildberriesApiApplication.class, args);
 
         WildberriesClient client = new WildberriesClient("https://suppliers-api.wildberries.ru",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6ImVjNTdmNDU3LTJjYmQtNDRkNy05YWY4LTI2ODU1OTBlNWM0MSJ9.HDZcTwdnR0pi570RYYIO8ogUCaxL2LoaCWo-aNmUXuk");
+                "1234567890");
 
         WildberriesManager manager = new WildberriesManager(client);
+
+//        UUID uuid = manager.uploadFile();
+        UUID uuid = UUID.fromString("2422ac4f-5f28-456d-91e9-6721590bc70b");
+        HashMap<String, UUID> files = new HashMap<>();
+        files.put("Фото", uuid);
+        manager.createCard(files);
+
         ObjectConfig cardConfig = manager.getObjectConfig("Кроссовки");
     }
 }

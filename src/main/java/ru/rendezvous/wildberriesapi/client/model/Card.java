@@ -11,18 +11,18 @@ import java.util.List;
 public class Card {
     List<Addin> addin = new ArrayList<>();
     private String countryProduction;
-    private String createdAt;
+//    private String createdAt;
     private String id;
-    private float imtId;
-    private float imtSupplierId;
+//    private float imtId;
+//    private float imtSupplierId;
     List<Nomenclature> nomenclatures = new ArrayList<>();
     private String object;
     private String parent;
-    private String supplierId;
+//    private String supplierId;
     private String supplierVendorCode;
-    private String updatedAt;
+//    private String updatedAt;
     private String uploadID;
-    private float userId;
+//    private float userId;
 
     @Getter @Setter
     public static class Nomenclature {
@@ -30,7 +30,7 @@ public class Card {
         private String concatVendorCode;
         private String id;
         private boolean isArchive;
-        private float nmId;
+//        private float nmId;
         List <Variation> variations = new ArrayList<>();
         private String vendorCode;
     }
@@ -59,7 +59,7 @@ public class Card {
 
     @Getter @Setter
     public static class Params {
-        private float count;
+        private Float count;
         private String units;
         private String value;
 
@@ -73,7 +73,7 @@ public class Card {
             this.value = value;
         }
 
-        public Params(float count, String units, String value) {
+        public Params(Float count, String units, String value) {
             this.count = count;
             this.units = units;
             this.value = value;
@@ -85,7 +85,7 @@ public class Card {
         List <Addin> addin = new ArrayList<>();
         private String barcode;
         List <String> barcodes = new ArrayList<>();
-        private float chrtId;
+//        private float chrtId;
         List <String> errors = new ArrayList<>();
         private String id;
     }
